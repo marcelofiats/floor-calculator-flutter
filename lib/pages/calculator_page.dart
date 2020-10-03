@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:floor_calculator/controllers/calculator_controller.dart';
 import 'package:floor_calculator/dialogs/result_dialog.dart';
 import 'package:floor_calculator/helpers/validator_helper.dart';
@@ -12,6 +14,7 @@ class CalculatorPage extends StatefulWidget {
 class _CalculatorPageState extends State<CalculatorPage> {
   final _formKey = GlobalKey<FormState>();
   final _controller = CalculatorController();
+  final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          _buildLimparButton(),
+          _buildVerticalSpace(),
           _buildHeaderText('Dimensões do cômodo'),
           _buildVerticalSpace(),
           _buildNumberInputField(
@@ -56,6 +61,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
           _buildNumberInputField(
             'Comprimento (centímetros)',
             onSaved: _controller.setFloorLength,
+          ),
+          _buildVerticalSpace(),
+          _buildHeaderText('Valor do Revestimento'),
+          _buildVerticalSpace(),
+          _buildNumberInputField(
+            'Preço por M²',
+            onSaved: _controller.setPriceFloor,
           ),
           _buildVerticalSpace(height: 40),
           _buildCalculateButton(),
@@ -83,6 +95,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
     );
   }
 
+  _buildLimparButton() {
+    return RaisedButton(
+      child: const Text('Limpar Campos'),
+      onPressed: _limparcampo,
+    );
+  }
+
   _buildHeaderText(String label) {
     return Container(
       color: Theme.of(context).accentColor.withOpacity(0.2),
@@ -99,7 +118,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     );
   }
 
-  _buildVerticalSpace({double height = 20.0}) {
+  _buildVerticalSpace({double height = 13.0}) {
     return SizedBox(height: height);
   }
 
@@ -112,5 +131,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
         builder: (context) => ResultDialog(result),
       );
     }
+  }
+
+  void _limparcampo() {
+    _formKey.currentState.reset();
   }
 }
